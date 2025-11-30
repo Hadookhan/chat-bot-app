@@ -5,3 +5,13 @@
 bin/
 obj/
 
+# DB / secrets
+*.db
+*.sqlite
+*.sql.dmp
+.env
+.env.*
+
+# Backend cache
+__pycache__/
+venv/
