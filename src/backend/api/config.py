@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()  # looks for .env in the current or parent dirs
 
-# Going to use to configure the Flask app database
+# Use to configure the database Flask will use
 POSTGRES_URI = (
     f"postgresql://{os.environ['POSTGRES_USER']}:"
     f"{os.environ['POSTGRES_PASSWORD']}@"
@@ -13,4 +13,5 @@ POSTGRES_URI = (
     f"{os.environ['POSTGRES_DB']}"
 )
 
+# Same thing as database above but for caching with redis
 REDIS_URL = f"redis://{os.environ['REDIS_HOST']}:{os.environ['REDIS_PORT']}/0"
