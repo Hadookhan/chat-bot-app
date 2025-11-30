@@ -1,3 +1,7 @@
-# Visual Studio
+# Visual Studio stuff
 .vs/
-*.vsidx
+*.user
+*.suo
+bin/
+obj/
+
