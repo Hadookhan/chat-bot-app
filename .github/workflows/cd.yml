@@ -1,3 +1,5 @@
+# CONTINUOUSLY PUSHES UPDATED CODE TO AWS SERVER
+
 name: CD
 
 on:
@@ -11,11 +13,11 @@ jobs:
     steps:
       - name: Deploy to server via SSH and docker-compose
         uses: appleboy/ssh-action@v1.2.0
+        # SSH's into AWS server
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER || 'ubuntu' }}
           key: ${{ secrets.SSH_KEY }}
-          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
           script: |
             # Go to or create the deployment folder
             mkdir -p /proj/chatbot-app
