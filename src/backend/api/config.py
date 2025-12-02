@@ -15,3 +15,8 @@ POSTGRES_URI = (
 
 # Same thing as database above but for caching with redis
 REDIS_URL = f"redis://{os.environ['REDIS_HOST']}:{os.environ['REDIS_PORT']}/0"
+
+class Config:
+
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

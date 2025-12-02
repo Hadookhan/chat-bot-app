@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from .config import POSTGRES_URI, REDIS_URL
+from .config import POSTGRES_URI, REDIS_URL, Config
 import openai
 import os
 from .extensions import db
@@ -8,8 +8,7 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 app = Flask(__name__)
 
-app.config["POSTGRES_URI"] = POSTGRES_URI
-app.config["REDIS_URL"] = REDIS_URL
+app.config.from_object(Config)
 
 db.init_app(app)
 
