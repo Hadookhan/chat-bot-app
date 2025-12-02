@@ -1,5 +1,5 @@
 from datetime import datetime
-from ..api.extensions import db
+from backend.api.extensions import db
 
 class ChatMessage(db.Model):
     __tablename__ = "chat_messages"
