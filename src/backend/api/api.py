@@ -4,6 +4,7 @@ import openai
 import os
 from .extensions import db
 from models.chat import ChatMessage
+from models.user import User
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -12,6 +13,10 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
+
+# Creates Tables
+with app.app_context():
+    db.create_all()
 
 @app.get("/")
 def home():
@@ -28,9 +33,20 @@ def signup():
     if not username or not email or not password:
         return jsonify({"error": "missing fields"}), 400
 
-    # Will create user in DB here
+    # Adding user to User Table
+    exists = User.query.filter(
+        (User.username == username) or (User.email == email)
+    ).first()
+    if exists:
+        return jsonify({"error": "user already exists"}), 409
+    
+    user = User(username=username, email=email)
+    user.set_password(password)
 
-    return jsonify({"message": "user created"}), 201
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({"message": "user created", "user_id": user.id}), 201
 
 @app.get("/login")
 def login():
