@@ -14,6 +14,7 @@ Uses a C# Frontend application, talks to a Python backend service.
 - Hosted **AWS EC2** server.
 - Connected CD pipeline to **auto-deploy docker containers on EC2 server**.
 - Hosted **AWS CloudFront** to front for Nginx as a CDN over web using *HTTPS* for secure API data.
+- Ensured a fully working communication between frontend and backend servers.
 
 ## Skills I learned
 | Category | Skills |
