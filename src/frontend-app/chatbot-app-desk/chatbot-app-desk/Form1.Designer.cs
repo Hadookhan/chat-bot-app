@@ -33,6 +33,7 @@
             this.txtbxUsername = new System.Windows.Forms.TextBox();
             this.txtbxEmail = new System.Windows.Forms.TextBox();
             this.txtbxPass = new System.Windows.Forms.TextBox();
+            this.lnklblSignIn = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // btnSubmit
@@ -43,6 +44,7 @@
             this.btnSubmit.TabIndex = 0;
             this.btnSubmit.Text = "Create account";
             this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // lblSignUp
             // 
@@ -78,12 +80,23 @@
             // 
             // txtbxPass
             // 
-            this.txtbxPass.Location = new System.Drawing.Point(180, 256);
+            this.txtbxPass.Location = new System.Drawing.Point(180, 254);
             this.txtbxPass.Name = "txtbxPass";
             this.txtbxPass.Size = new System.Drawing.Size(157, 20);
             this.txtbxPass.TabIndex = 4;
             this.txtbxPass.Text = "Enter Password";
             this.txtbxPass.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtbxPass.TextChanged += new System.EventHandler(this.txtbxPass_TextChanged);
+            // 
+            // lnklblSignIn
+            // 
+            this.lnklblSignIn.AutoSize = true;
+            this.lnklblSignIn.Location = new System.Drawing.Point(235, 352);
+            this.lnklblSignIn.Name = "lnklblSignIn";
+            this.lnklblSignIn.Size = new System.Drawing.Size(39, 13);
+            this.lnklblSignIn.TabIndex = 5;
+            this.lnklblSignIn.TabStop = true;
+            this.lnklblSignIn.Text = "Sign in";
             // 
             // Form1
             // 
@@ -91,6 +104,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(532, 486);
+            this.Controls.Add(this.lnklblSignIn);
             this.Controls.Add(this.txtbxPass);
             this.Controls.Add(this.txtbxEmail);
             this.Controls.Add(this.txtbxUsername);
@@ -110,6 +124,7 @@
         private System.Windows.Forms.TextBox txtbxUsername;
         private System.Windows.Forms.TextBox txtbxEmail;
         private System.Windows.Forms.TextBox txtbxPass;
+        private System.Windows.Forms.LinkLabel lnklblSignIn;
     }
 }
 

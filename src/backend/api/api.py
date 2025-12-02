@@ -17,23 +17,20 @@ db.init_app(app)
 def home():
     return "Hello from Flask!"
 
-# Will handle one JSON request each time signup API is called
-@app.get("/signup")
+# Will handle one JSON request each time a new user has been sent to the signup API
+@app.post("/api/signup")
 def signup():
-    data = request.get_json(force=True)
-
+    data = request.get_json(silent=True) or {}
     username = data.get("username")
     email = data.get("email")
     password = data.get("password")
 
     if not username or not email or not password:
-        return jsonify({"error": "Username, email or password is blank"}), 400
+        return jsonify({"error": "missing fields"}), 400
 
-    return jsonify({
-        "username": username,
-        "email" : email,
-        "password" : password
-        })
+    # Will create user in DB here
+
+    return jsonify({"message": "user created"}), 201
 
 @app.get("/login")
 def login():
