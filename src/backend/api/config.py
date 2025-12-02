@@ -20,6 +20,6 @@ class Config:
 
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "postgresql+psycopg2://chatbot_user:super_secure_password@db:5432/chatbot_db"
+        "postgresql+psycopg2://chatbot:chatbot_password@db:5432/chatbot_db"
         )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
