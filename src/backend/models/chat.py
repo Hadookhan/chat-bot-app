@@ -8,4 +8,6 @@ class ChatMessage(db.Model):
     user_id = db.Column(db.String, index=True, nullable=False)
     message = db.Column(db.String, nullable=False)
     reply = db.Column(db.String, nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, index=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
+
+    # NEXT STEP: ADD NEW USER CHAT ENTRIES INTO THIS DB
