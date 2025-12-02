@@ -3,7 +3,7 @@ from .config import POSTGRES_URI, REDIS_URL, Config
 import openai
 import os
 from .extensions import db
-from backend.models.chat import ChatMessage
+from ..models.chat import ChatMessage
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
