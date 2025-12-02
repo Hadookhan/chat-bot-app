@@ -14,11 +14,11 @@ services:
       - redis
     networks:
       - app-net
+    restart: unless-stopped # Reruns service if server is restarted
 
   db:
     image: postgres
     container_name: chatbot-postgres
-    restart: always
     shm_size: 128mb
     ports:
       - "5432:5432"
@@ -30,6 +30,7 @@ services:
       - postgres-data:/var/lib/postgresql
     networks:
       - app-net
+    restart: unless-stopped
 
   redis:
     image: redis
@@ -38,6 +39,7 @@ services:
       - redis-data:/data
     networks:
       - app-net
+    restart: unless-stopped
 
   nginx:
     image: nginx
@@ -50,6 +52,7 @@ services:
       - api
     networks:
       - app-net
+    restart: unless-stopped
 
 volumes:
   postgres-data:
