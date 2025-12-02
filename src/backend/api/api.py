@@ -18,7 +18,7 @@ def home():
     return "Hello from Flask!"
 
 # Will handle one JSON request each time a new user has been sent to the signup API
-@app.post("/api/signup")
+@app.post("/signup")
 def signup():
     data = request.get_json(silent=True) or {}
     username = data.get("username")
@@ -40,7 +40,7 @@ def login():
 # Chat message will be sent to /api/llm/chat
 # This function will process the chat message and make GPT reply
 # Returns JSON, which will soon be sent to Redis to persist
-@app.post("/api/llm/chat")
+@app.post("/llm/chat")
 def llm_chat():
     data = request.get_json(force=True)
     user_message = data.get("message")
