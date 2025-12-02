@@ -4,7 +4,7 @@ Uses a C# Frontend application, talks to a Python backend service.
 
 
 ## DEVELOPMENT PROCESS (CURRENT WORK)
-- Configured Relational databases for multiple users.
+- Set up SQL for Relational databases for multiple users using PostgreSQL.
 - Set up Flask to add URL endpoints for API.
 - Configured Nginx, acting as a CDN to forward traffic to Flask API's.
 - Configured Docker-compose to containerize: API, Database, Redis, Nginx.
