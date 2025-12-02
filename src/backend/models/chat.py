@@ -11,4 +11,4 @@ class ChatMessage(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now, index=True)
 
     # Connects users -> chat_messages
-    user = db.relationship("users", backref="chat_messages")
+    user = db.relationship("User", backref="chat_messages")
