@@ -16,7 +16,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend source code into the image
-COPY . /app/backend
+COPY . /app
+
+# Make /app importable as top-level
+ENV PYTHONPATH=/app
 
 # Don't buffer Python output
 ENV PYTHONUNBUFFERED=1
