@@ -18,5 +18,8 @@ REDIS_URL = f"redis://{os.environ['REDIS_HOST']}:{os.environ['REDIS_PORT']}/0"
 
 class Config:
 
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "DATABASE_URL",
+        "postgresql+psycopg2://chatbot_user:super_secure_password@db:5432/chatbot_db"
+        )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
