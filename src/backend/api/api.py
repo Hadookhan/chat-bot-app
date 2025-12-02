@@ -3,12 +3,19 @@ from .config import POSTGRES_URI, REDIS_URL, Config
 import openai
 import os
 from .extensions import db
+from backend.models.chat import ChatMessage
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 app = Flask(__name__)
 
-app.config.from_object(Config)
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL",
+    "postgresql+psycopg2://chatbot_user:super_secure_password@db:5432/chatbot_db",
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+print("DB URI is:", app.config.get("SQLALCHEMY_DATABASE_URI"))
 
 db.init_app(app)
 
