@@ -16,7 +16,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend source code into the image
-COPY . .
+COPY backend /app/backend
 
 # Don't buffer Python output
 ENV PYTHONUNBUFFERED=1
