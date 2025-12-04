@@ -3,7 +3,8 @@ A system that enables users to talk to a GPT AI, through a desktop **AND** mobil
 Uses a C# Frontend application, talks to a Python backend service.
 
 
-## DEVELOPMENT PROCESS (CURRENT WORK)
+## DEVELOPMENT PROCESS (CURRENT WORK + TO-DO)
+### Backend
 - Set up SQL for Relational databases for multiple users using **PostgreSQL**.
 - Set up **Flask** to add URL endpoints for API.
 - Configured **Nginx**, acting as a CDN to forward traffic to Flask API's.
@@ -14,7 +15,14 @@ Uses a C# Frontend application, talks to a Python backend service.
 - Hosted **AWS EC2** server.
 - Connected CD pipeline to **auto-deploy docker containers on EC2 server**.
 - Hosted **AWS CloudFront** to front for Nginx as a CDN over web using *HTTPS* for secure API data.
-- Ensured a fully working communication between frontend and backend servers.
+- Set up **OpenAI GPT** model and handling response-request communication over API.
+- (**TO-DO**) Uses **Redis** to cache chat history and user details (upon request).
+
+### Frontend
+- Written in **Visual Studio C#**.
+- Desktop uses **Microsoft Form applications**.
+- Ensured a fully working communication from the signup page to backend servers and database.
+- (**TO-DO**) Mobile uses **MAUI Framework**.
 
 ## Skills I learned
 | Category | Skills |
