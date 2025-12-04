@@ -15,13 +15,13 @@ using System.Net.Http.Json;
 namespace chatbot_app_desk
 {
 
-    public partial class signUpForm : Form
+    public partial class SignUpForm : Form
     {
 
         static HttpClient client = new HttpClient(); // going to use to make requests to API
         bool viewPass = true;
 
-        public signUpForm()
+        public SignUpForm()
         {
             InitializeComponent();
 
@@ -41,6 +41,7 @@ namespace chatbot_app_desk
 
             txtbxPass.GotFocus += RemovePassword;
             txtbxPass.LostFocus += AddText;
+
         }
 
         private void txtbxUsername_TextChanged(object sender, EventArgs e)
@@ -128,6 +129,12 @@ namespace chatbot_app_desk
             {
                 var location = await CreateUserAsync(newUser);
                 MessageBox.Show("Signup successful!");
+                using (var signInForm = new SignInForm())
+                {
+                    this.Hide();
+                    signInForm.ShowDialog();
+                    this.Close();
+                }
             }
             catch (HttpRequestException ex)
             {
@@ -153,6 +160,21 @@ namespace chatbot_app_desk
             response.EnsureSuccessStatusCode();
 
             return response.Headers.Location;
+        }
+
+        private void lnklblSignIn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            using (var signInForm = new SignInForm())
+            {
+                this.Hide();
+                signInForm.ShowDialog();
+                this.Close();
+            }
+        }
+
+        private void lblSignUp_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

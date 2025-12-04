@@ -16,7 +16,7 @@ namespace chatbot_app_desk
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new signUpForm());
+            Application.Run(new SignUpForm());
         }
     }
 }

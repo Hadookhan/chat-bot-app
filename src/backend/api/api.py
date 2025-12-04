@@ -38,7 +38,7 @@ def signup():
         (User.username == username) or (User.email == email)
     ).first()
     if exists:
-        return jsonify({"error": "user already exists"}), 409
+        return jsonify({"error": "user already exists"}), 409 # 409 = conflict
     
     user = User(username=username, email=email)
     user.set_password(password)
@@ -46,11 +46,26 @@ def signup():
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({"message": "user created", "user_id": user.id}), 201
+    return jsonify({"message": "user created", "user_id": user.id}), 201 # 201 = created
 
-@app.get("/login")
+@app.post("/login")
 def login():
-    return "login page"
+    data = request.get_json(silent=True) or {}
+    email = data.get("email")
+    password = data.get("password")
+
+    if not email or not password:
+        return jsonify({"error": "missing fields"}), 400
+    
+    user = User.query.filter_by(email=email).first()
+    
+    if not user or not user.check_password(password):
+        return jsonify({"error": "Email or password is incorrect"}), 401 # 401 = unauthorized
+
+    return jsonify({"message": "user logged in",
+                    "user_id": user.id,
+                    "username": user.username,
+                    }), 200 # 200 = success
 
 # Frontend user will send chat to AI
 # Chat message will be sent to /api/llm/chat

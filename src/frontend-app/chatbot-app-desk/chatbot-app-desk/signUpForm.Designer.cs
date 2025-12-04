@@ -1,6 +1,6 @@
 ﻿namespace chatbot_app_desk
 {
-    partial class signUpForm
+    partial class SignUpForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(signUpForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SignUpForm));
             this.btnSubmit = new System.Windows.Forms.Button();
             this.lblSignUp = new System.Windows.Forms.Label();
-            this.txtbxUsername = new System.Windows.Forms.TextBox();
             this.txtbxEmail = new System.Windows.Forms.TextBox();
             this.txtbxPass = new System.Windows.Forms.TextBox();
             this.lnklblSignIn = new System.Windows.Forms.LinkLabel();
             this.imgLogo = new System.Windows.Forms.PictureBox();
+            this.txtbxUsername = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.imgLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -62,17 +62,7 @@
             this.lblSignUp.TabIndex = 1;
             this.lblSignUp.Text = "SIGN UP";
             this.lblSignUp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // txtbxUsername
-            // 
-            this.txtbxUsername.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtbxUsername.Location = new System.Drawing.Point(25, 161);
-            this.txtbxUsername.Name = "txtbxUsername";
-            this.txtbxUsername.Size = new System.Drawing.Size(157, 20);
-            this.txtbxUsername.TabIndex = 2;
-            this.txtbxUsername.Text = "Enter Username";
-            this.txtbxUsername.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtbxUsername.TextChanged += new System.EventHandler(this.txtbxUsername_TextChanged);
+            this.lblSignUp.Click += new System.EventHandler(this.lblSignUp_Click);
             // 
             // txtbxEmail
             // 
@@ -99,19 +89,20 @@
             // lnklblSignIn
             // 
             this.lnklblSignIn.AutoSize = true;
-            this.lnklblSignIn.Location = new System.Drawing.Point(80, 372);
+            this.lnklblSignIn.Location = new System.Drawing.Point(53, 456);
             this.lnklblSignIn.Name = "lnklblSignIn";
-            this.lnklblSignIn.Size = new System.Drawing.Size(39, 13);
+            this.lnklblSignIn.Size = new System.Drawing.Size(96, 26);
             this.lnklblSignIn.TabIndex = 5;
             this.lnklblSignIn.TabStop = true;
-            this.lnklblSignIn.Text = "Sign in";
+            this.lnklblSignIn.Text = "Have an account?\r\nSign in";
+            this.lnklblSignIn.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lnklblSignIn.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnklblSignIn_LinkClicked);
             // 
             // imgLogo
             // 
             this.imgLogo.BackColor = System.Drawing.Color.Transparent;
             this.imgLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.imgLogo.ErrorImage = ((System.Drawing.Image)(resources.GetObject("imgLogo.ErrorImage")));
-            this.imgLogo.Image = ((System.Drawing.Image)(resources.GetObject("imgLogo.Image")));
             this.imgLogo.ImageLocation = "0,0";
             this.imgLogo.InitialImage = ((System.Drawing.Image)(resources.GetObject("imgLogo.InitialImage")));
             this.imgLogo.Location = new System.Drawing.Point(196, 1);
@@ -121,7 +112,18 @@
             this.imgLogo.TabIndex = 6;
             this.imgLogo.TabStop = false;
             // 
-            // signUpForm
+            // txtbxUsername
+            // 
+            this.txtbxUsername.Font = new System.Drawing.Font("Arial Rounded MT Bold", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtbxUsername.Location = new System.Drawing.Point(25, 161);
+            this.txtbxUsername.Name = "txtbxUsername";
+            this.txtbxUsername.Size = new System.Drawing.Size(157, 20);
+            this.txtbxUsername.TabIndex = 2;
+            this.txtbxUsername.Text = "Enter Username";
+            this.txtbxUsername.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtbxUsername.TextChanged += new System.EventHandler(this.txtbxUsername_TextChanged);
+            // 
+            // SignUpForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -135,7 +137,7 @@
             this.Controls.Add(this.txtbxUsername);
             this.Controls.Add(this.lblSignUp);
             this.Controls.Add(this.btnSubmit);
-            this.Name = "signUpForm";
+            this.Name = "SignUpForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sign Up";
             ((System.ComponentModel.ISupportInitialize)(this.imgLogo)).EndInit();
@@ -148,11 +150,11 @@
 
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.Label lblSignUp;
-        private System.Windows.Forms.TextBox txtbxUsername;
         private System.Windows.Forms.TextBox txtbxEmail;
         private System.Windows.Forms.TextBox txtbxPass;
         private System.Windows.Forms.LinkLabel lnklblSignIn;
         private System.Windows.Forms.PictureBox imgLogo;
+        private System.Windows.Forms.TextBox txtbxUsername;
     }
 }
 
