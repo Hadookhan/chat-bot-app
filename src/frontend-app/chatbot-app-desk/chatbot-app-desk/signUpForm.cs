@@ -18,14 +18,15 @@ namespace chatbot_app_desk
     public partial class SignUpForm : Form
     {
 
-        static HttpClient client = new HttpClient(); // going to use to make requests to API
+        static HttpClient client = new HttpClient()
+        {
+            BaseAddress = new Uri("https://d3pnxez72y4km9.cloudfront.net")
+        }; // going to use to make requests to API
         bool viewPass = true;
 
         public SignUpForm()
         {
             InitializeComponent();
-
-            client.BaseAddress = new Uri("https://d3pnxez72y4km9.cloudfront.net");
 
             txtbxUsername.Text = "Enter Username...";
 

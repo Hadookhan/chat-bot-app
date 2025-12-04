@@ -17,14 +17,15 @@ namespace chatbot_app_desk
     public partial class SignInForm : Form
     {
 
-        static HttpClient client = new HttpClient(); // going to use to make requests to API
+        static HttpClient client = new HttpClient()
+        {
+            BaseAddress = new Uri("https://d3pnxez72y4km9.cloudfront.net")
+        }; // going to use to make requests to API
         bool viewPass = true;
 
         public SignInForm()
         {
             InitializeComponent();
-
-            client.BaseAddress = new Uri("https://d3pnxez72y4km9.cloudfront.net");
 
             txtbxEmail.Text = "Enter Email...";
 
@@ -103,7 +104,7 @@ namespace chatbot_app_desk
             try
             {
                 var location = await LoginUser(user);
-                MessageBox.Show("Signup successful!");
+                MessageBox.Show("Login successful!");
                 using (var signInForm = new SignInForm())
                 {
                     this.Hide();
