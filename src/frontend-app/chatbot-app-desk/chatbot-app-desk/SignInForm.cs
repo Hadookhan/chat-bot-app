@@ -105,9 +105,10 @@ namespace chatbot_app_desk
             {
                 var location = await LoginUser(user);
                 MessageBox.Show("Login successful!");
-                using (var signInForm = new SignInForm())
+                using (var chatPage = new ChatPage())
                 {
                     this.Hide();
+                    chatPage.ShowDialog();
                     this.Close();
                 }
             }
