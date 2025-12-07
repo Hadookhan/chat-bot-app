@@ -376,9 +376,27 @@ namespace chatbot_app_desk
             txtBoxPersonalise.Text = txtBoxPersonalise.Text;
         }
 
-        private void btnResetPrompt_Click(object sender, EventArgs e)
+        private async void btnResetPrompt_Click(object sender, EventArgs e)
         {
             txtBoxPersonalise.Text = "";
+
+            var req = new
+            {
+                userid = _currentUserId.ToString(),
+                bot_name = (lstbxChats.SelectedItem as Conversation)?.PersonName
+            };
+
+            string json = JsonSerializer.Serialize(req);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("/api/llm/chat/clear", content);
+            response.EnsureSuccessStatusCode();
+
+            if (lstbxChats.SelectedItem is Conversation conv)
+            {
+                conv.Messages.Clear();
+                RenderConversation(conv);
+            }
         }
 
         private async void btnClearChat_Click(object sender, EventArgs e)
@@ -392,8 +410,14 @@ namespace chatbot_app_desk
             string json = JsonSerializer.Serialize(req);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("/api/llm/clear", content);
+            var response = await _httpClient.PostAsync("/api/llm/chat/clear", content);
             response.EnsureSuccessStatusCode();
+
+            if (lstbxChats.SelectedItem is Conversation conv)
+            {
+                conv.Messages.Clear();
+                RenderConversation(conv);
+            }
         }
     }
 
