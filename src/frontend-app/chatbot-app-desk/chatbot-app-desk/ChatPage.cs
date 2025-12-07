@@ -86,7 +86,7 @@ namespace chatbot_app_desk
                         Time = DateTime.TryParse(log.timestamp, out var t2) ? t2 : DateTime.Now
                     });
                 }
-                if (!string.IsNullOrWhiteSpace(log.system_prompt))
+                if (!string.IsNullOrWhiteSpace(log.system_prompt) && (log.bot_name == "Personalisable"))
                 {
                     txtBoxPersonalise.Text = log.system_prompt;
                     txtBoxPersonalise.ReadOnly = true;
@@ -431,7 +431,15 @@ namespace chatbot_app_desk
 
         private void txtBoxPersonalise_TextChanged(object sender, EventArgs e)
         {
-            if (txtBoxPersonalise.Text == "")
+            if (txtBoxPersonalise.ReadOnly == false)
+            {
+                txtBoxPersonalise.Cursor = Cursors.Default;
+            }
+            else {
+                txtBoxPersonalise.Cursor = Cursors.IBeam;
+            }
+
+                if (txtBoxPersonalise.Text == "")
             {
                 lblExamplePrompt.Visible = true;
             }
