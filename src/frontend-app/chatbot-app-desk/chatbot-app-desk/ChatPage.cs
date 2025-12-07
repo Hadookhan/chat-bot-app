@@ -374,11 +374,13 @@ namespace chatbot_app_desk
         private void btnSetPrompt_Click(object sender, EventArgs e)
         {
             txtBoxPersonalise.Text = txtBoxPersonalise.Text;
+            txtBoxPersonalise.ReadOnly = true;
         }
 
         private async void btnResetPrompt_Click(object sender, EventArgs e)
         {
             txtBoxPersonalise.Text = "";
+            txtBoxPersonalise.ReadOnly = false;
 
             var req = new
             {
@@ -401,6 +403,9 @@ namespace chatbot_app_desk
 
         private async void btnClearChat_Click(object sender, EventArgs e)
         {
+            txtBoxPersonalise.Text = "";
+            txtBoxPersonalise.ReadOnly = false;
+
             var req = new
             {
                 userid = _currentUserId.ToString(),
