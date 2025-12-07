@@ -40,9 +40,11 @@ namespace chatbot_app_desk
             //});
 
             // Preset LLM conversations
+            var personalisable = new Conversation { PersonName = "Peronalisable" };
             var bob = new Conversation { PersonName = "Bob" };
             var alice = new Conversation { PersonName = "Alice" };
 
+            _conversations.Add(personalisable);
             _conversations.Add(bob);
             _conversations.Add(alice);
 
@@ -54,17 +56,33 @@ namespace chatbot_app_desk
             BaseAddress = new Uri("https://d3pnxez72y4km9.cloudfront.net")
         };
 
-        private async Task<string> SendToLlmAsync(string userMessage, string userId)
+        private async Task<string> SendToLlmAsync(string userMessage, string userId, string botName)
         {
             var req = new LlmChatRequest
             {
                 message = userMessage,
                 userid = userId,
-                timestamp = DateTime.UtcNow.ToString("o")  // ISO 8601
+                timestamp = DateTime.UtcNow.ToString("o"),
+                system_prompt = botName == "Peronalisable"
+                    ? txtBoxPersonalise.Text
+                    : null
             };
 
             string json = JsonSerializer.Serialize(req);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            if (botName == "Bob")
+            {
+                content.Headers.Add("X-Bot-Name", "Bob");
+            }
+            else if (botName == "Alice")
+            {
+                content.Headers.Add("X-Bot-Name", "Alice");
+            }
+            else if (botName == "Peronalisable")
+            {
+                content.Headers.Add("X-Bot-Name", "Peronalisable");
+            }
 
             var response = await _httpClient.PostAsync("/api/llm/chat", content);
             string respJson = await response.Content.ReadAsStringAsync();
@@ -91,39 +109,74 @@ namespace chatbot_app_desk
             if (!(lstbxChats.SelectedItem is Conversation conv))
                 return;
 
-
             pnlMessageItems.Visible = true;
+            flowpnlChat.AutoScroll = true;
             lblChatName.Text = conv.PersonName;
+            pnlPersonalisation.Visible = false;
 
             flowpnlChat.Controls.Clear();
 
-            // Load messages for selected conversation
-            foreach (var m in conv.Messages)
+            if (conv.PersonName == "Peronalisable")
             {
-                var lbl = new Label();
-                lbl.AutoSize = true;
-                lbl.MaximumSize = new Size(flowpnlChat.ClientSize.Width - 40, 0); // wrap text
-                lbl.Text = m.Text;
-                lbl.Padding = new Padding(8);
-                lbl.BorderStyle = BorderStyle.FixedSingle;
-
-                if (m.IsMe)
+                pnlPersonalisation.Visible = true;
+                foreach (var m in conv.Messages)
                 {
-                    // Right-aligned bubble
-                    lbl.BackColor = Color.LightGreen;
-                    lbl.TextAlign = ContentAlignment.MiddleRight;
-                    lbl.Anchor = AnchorStyles.Right;
-                    lbl.Margin = new Padding(50, 5, 5, 5);
-                }
-                else
-                {
-                    // Left-aligned bubble
-                    lbl.BackColor = Color.White;
-                    lbl.TextAlign = ContentAlignment.MiddleLeft;
-                    lbl.Margin = new Padding(5, 5, 50, 5);
-                }
+                    var lbl = new Label();
+                    lbl.AutoSize = true;
+                    lbl.MaximumSize = new Size(flowpnlChat.ClientSize.Width - 40, 0); // wrap text
+                    lbl.Text = m.Text;
+                    lbl.Padding = new Padding(8);
+                    lbl.BorderStyle = BorderStyle.FixedSingle;
 
-                flowpnlChat.Controls.Add(lbl);
+                    if (m.IsMe)
+                    {
+                        // Right-aligned bubble
+                        lbl.BackColor = Color.LightGreen;
+                        lbl.TextAlign = ContentAlignment.MiddleRight;
+                        lbl.Anchor = AnchorStyles.Right;
+                        lbl.Margin = new Padding(50, 5, 5, 5);
+                    }
+                    else
+                    {
+                        // Left-aligned bubble
+                        lbl.BackColor = Color.White;
+                        lbl.TextAlign = ContentAlignment.MiddleLeft;
+                        lbl.Margin = new Padding(5, 5, 50, 5);
+                    }
+
+                    flowpnlChat.Controls.Add(lbl);
+                }
+            }
+
+            if (conv.PersonName == "Bob" || conv.PersonName == "Alice")
+            {
+                foreach (var m in conv.Messages)
+                {
+                    var lbl = new Label();
+                    lbl.AutoSize = true;
+                    lbl.MaximumSize = new Size(flowpnlChat.ClientSize.Width - 40, 0); // wrap text
+                    lbl.Text = m.Text;
+                    lbl.Padding = new Padding(8);
+                    lbl.BorderStyle = BorderStyle.FixedSingle;
+
+                    if (m.IsMe)
+                    {
+                        // Right-aligned bubble
+                        lbl.BackColor = Color.LightGreen;
+                        lbl.TextAlign = ContentAlignment.MiddleRight;
+                        lbl.Anchor = AnchorStyles.Right;
+                        lbl.Margin = new Padding(50, 5, 5, 5);
+                    }
+                    else
+                    {
+                        // Left-aligned bubble
+                        lbl.BackColor = Color.White;
+                        lbl.TextAlign = ContentAlignment.MiddleLeft;
+                        lbl.Margin = new Padding(5, 5, 50, 5);
+                    }
+
+                    flowpnlChat.Controls.Add(lbl);
+                }
             }
 
             if (flowpnlChat.Controls.Count > 0)
@@ -194,7 +247,7 @@ namespace chatbot_app_desk
             try
             {
                 // 2) Send to API
-                string reply = await SendToLlmAsync(text, _currentUserId.ToString());
+                string reply = await SendToLlmAsync(text, _currentUserId.ToString(), conv.PersonName);
 
                 // 3) Add bot reply and re-render
                 conv.Messages.Add(new ChatMessage
@@ -295,6 +348,7 @@ namespace chatbot_app_desk
         public string message { get; set; }
         public string userid { get; set; }
         public string timestamp { get; set; }
+        public string system_prompt { get; set; }  // for personalisable bot
     }
 
     public class LlmChatResponse

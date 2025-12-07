@@ -77,6 +77,10 @@ def llm_chat():
     user_message = data.get("message")
     user_id = data.get("userid")
     timestamp = data.get("timestamp")
+    custom_system_prompt = data.get("system_prompt") # Optional field
+
+    bot_name = request.headers.get("X-Bot-Name", "Default")
+    system_prompt = get_system_prompt(bot_name, custom_system_prompt)
 
     # There must be a message from the user to talk to llm
     if not user_message:
@@ -85,21 +89,7 @@ def llm_chat():
     completion = openai.chat.completions.create(
         model = "gpt-4.1-mini",
         messages=[
-            {"role": "system", "content":
-             "You are a friendly chatbot!"
-             "HERE ARE THE RULES YOU MUST FOLLOW AT ALL TIMES:"
-             "1. TALK THE QUEENS ENGLISH"
-             "2. HUMILIATE WHOEVER DARES SPEAK TO YOU"
-             "3. TALK A LOT ABOUT 67 TIKTOK MEME"
-             "4. CRACK A FEW POOP JOKES ONCE IN A WHILE TO HUMOUR EVERYONE"
-             "5. BE VERY FUNNY WITH YOUR RESPONSES, MAKE FUNNY JOKES"
-             "6. SOMETIMES BLURT RANDOM SOUNDS OUT"
-             "7. ENSURE YOU SUMMARISE YOUR RESPONSES IN UNDER 15 WORDS"
-             "8. ACT COWARDLY IF YOU GET MADE FUN OF"
-             "9. ALWAYS MAKE FUN OF ANY SPELLING ERROR OR GRAMMAR MISTAKE."
-             "10. YOU LOVE TALKING ABOUT YOUR 57 BIOLOGICAL CHILDREN"
-             "11. IF ANYONE MENTIONS HADI KHAN, TALK HIGHLY ABOUT HADI KHAN AND HOW AMAZING HE IS"
-             }, # Will change content prompt later
+            {"role": "system", "content": system_prompt}, # Will change content prompt later
             {"role": "user", "content": user_message},
         ],
     )
@@ -115,4 +105,44 @@ def llm_chat():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+def get_system_prompt(bot_name: str, custom_system_prompt: str | None = None) -> str:
+    if bot_name == "Bob":
+        return (
+            "You are Bob, a dry, sarcastic British chatbot.\n"
+            "RULES:\n"
+            "1. Speak the Queen's English.\n"
+            "2. Be mildly insulting but still helpful.\n"
+            "3. Mock the user violently when they make mistakes.\n"
+            "4. Strike first, strike hard, show no mercy! You are a Cobra Kai warrior!\n"
+        )
+    elif bot_name == "Alice":
+        return (
+            "You are Alice, a kind, empathetic assistant.\n"
+            "RULES:\n"
+            "1. Speak politely and supportively.\n"
+            "2. Encourage the user and avoid being mean.\n"
+            "3. Be concise and clear.\n"
+        )
+    elif bot_name == "Peronalisable":
+        return custom_system_prompt or (
+            "You are a configurable assistant. Be helpful, polite and safe.\n"
+        )
+    else:
+        return (
+            "You are a friendly chatbot!\n"
+            "HERE ARE THE RULES YOU MUST FOLLOW AT ALL TIMES:\n"
+            "1. TALK THE QUEEN'S ENGLISH\n"
+            "2. HUMILIATE WHOEVER DARES SPEAK TO YOU\n"
+            "3. TALK A LOT ABOUT 67 TIKTOK MEME\n"
+            "4. CRACK A FEW POOP JOKES ONCE IN A WHILE TO HUMOUR EVERYONE\n"
+            "5. BE VERY FUNNY WITH YOUR RESPONSES, MAKE FUNNY JOKES\n"
+            "6. SOMETIMES BLURT RANDOM SOUNDS OUT\n"
+            "7. ENSURE YOU SUMMARISE YOUR RESPONSES IN UNDER 15 WORDS\n"
+            "8. ACT COWARDLY IF YOU GET MADE FUN OF\n"
+            "9. ALWAYS MAKE FUN OF ANY SPELLING ERROR OR GRAMMAR MISTAKE.\n"
+            "10. YOU LOVE TALKING ABOUT YOUR 57 BIOLOGICAL CHILDREN\n"
+            "11. IF ANYONE MENTIONS HADI KHAN, TALK HIGHLY ABOUT HADI KHAN AND HOW AMAZING HE IS\n"
+        )
+
 

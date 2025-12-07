@@ -37,9 +37,13 @@
             this.chatBack = new System.Windows.Forms.PictureBox();
             this.txtbxMessage = new System.Windows.Forms.TextBox();
             this.btnSend = new System.Windows.Forms.Button();
+            this.txtBoxPersonalise = new System.Windows.Forms.TextBox();
+            this.pnlPersonalisation = new System.Windows.Forms.Panel();
+            this.lblEnterPersonalisation = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.textChatbackground)).BeginInit();
             this.pnlMessageItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chatBack)).BeginInit();
+            this.pnlPersonalisation.SuspendLayout();
             this.SuspendLayout();
             // 
             // lstbxChats
@@ -73,7 +77,7 @@
             // 
             this.btnProfile.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.btnProfile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnProfile.Location = new System.Drawing.Point(900, 12);
+            this.btnProfile.Location = new System.Drawing.Point(981, 12);
             this.btnProfile.Name = "btnProfile";
             this.btnProfile.Size = new System.Drawing.Size(63, 54);
             this.btnProfile.TabIndex = 2;
@@ -150,12 +154,43 @@
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click_1);
             // 
+            // txtBoxPersonalise
+            // 
+            this.txtBoxPersonalise.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtBoxPersonalise.Location = new System.Drawing.Point(18, 24);
+            this.txtBoxPersonalise.Multiline = true;
+            this.txtBoxPersonalise.Name = "txtBoxPersonalise";
+            this.txtBoxPersonalise.Size = new System.Drawing.Size(154, 305);
+            this.txtBoxPersonalise.TabIndex = 4;
+            // 
+            // pnlPersonalisation
+            // 
+            this.pnlPersonalisation.Controls.Add(this.lblEnterPersonalisation);
+            this.pnlPersonalisation.Controls.Add(this.txtBoxPersonalise);
+            this.pnlPersonalisation.Location = new System.Drawing.Point(872, 198);
+            this.pnlPersonalisation.Name = "pnlPersonalisation";
+            this.pnlPersonalisation.Size = new System.Drawing.Size(184, 340);
+            this.pnlPersonalisation.TabIndex = 6;
+            this.pnlPersonalisation.Visible = false;
+            // 
+            // lblEnterPersonalisation
+            // 
+            this.lblEnterPersonalisation.AutoSize = true;
+            this.lblEnterPersonalisation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEnterPersonalisation.Location = new System.Drawing.Point(0, 2);
+            this.lblEnterPersonalisation.Name = "lblEnterPersonalisation";
+            this.lblEnterPersonalisation.Size = new System.Drawing.Size(186, 16);
+            this.lblEnterPersonalisation.TabIndex = 6;
+            this.lblEnterPersonalisation.Text = "Enter your custom prompt!";
+            this.lblEnterPersonalisation.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // ChatPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(994, 538);
+            this.ClientSize = new System.Drawing.Size(1056, 538);
+            this.Controls.Add(this.pnlPersonalisation);
             this.Controls.Add(this.pnlMessageItems);
             this.Controls.Add(this.btnProfile);
             this.Controls.Add(this.textChatbackground);
@@ -168,6 +203,8 @@
             this.pnlMessageItems.ResumeLayout(false);
             this.pnlMessageItems.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chatBack)).EndInit();
+            this.pnlPersonalisation.ResumeLayout(false);
+            this.pnlPersonalisation.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -183,5 +220,8 @@
         private System.Windows.Forms.Label lblChatName;
         private System.Windows.Forms.PictureBox chatBack;
         private System.Windows.Forms.FlowLayoutPanel flowpnlChat;
+        private System.Windows.Forms.TextBox txtBoxPersonalise;
+        private System.Windows.Forms.Panel pnlPersonalisation;
+        private System.Windows.Forms.Label lblEnterPersonalisation;
     }
 }
