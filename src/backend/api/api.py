@@ -162,7 +162,7 @@ def get_system_prompt(bot_name: str, custom_system_prompt: str | None = None) ->
             "You are a configurable assistant. Be helpful, polite and safe.\n"
         )
     else:
-        return (
+        return custom_system_prompt or (
             "You are a friendly chatbot!\n"
             "HERE ARE THE RULES YOU MUST FOLLOW AT ALL TIMES:\n"
             "1. TALK THE QUEEN'S ENGLISH\n"

@@ -172,7 +172,7 @@ namespace chatbot_app_desk
 
         private void lstbxChats_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            
             if (!(lstbxChats.SelectedItem is Conversation conv))
                 return;
 

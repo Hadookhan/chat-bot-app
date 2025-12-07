@@ -137,6 +137,7 @@
             this.Controls.Add(this.txtbxUsername);
             this.Controls.Add(this.lblSignUp);
             this.Controls.Add(this.btnSubmit);
+            this.MaximizeBox = false;
             this.Name = "SignUpForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sign Up";

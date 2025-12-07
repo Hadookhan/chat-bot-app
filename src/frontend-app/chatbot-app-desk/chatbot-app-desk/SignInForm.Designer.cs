@@ -40,6 +40,9 @@
             // 
             // imgLogo
             // 
+            this.imgLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.imgLogo.BackColor = System.Drawing.Color.Transparent;
             this.imgLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.imgLogo.ErrorImage = ((System.Drawing.Image)(resources.GetObject("imgLogo.ErrorImage")));
@@ -54,6 +57,7 @@
             // 
             // lnklblSignUp
             // 
+            this.lnklblSignUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnklblSignUp.AutoSize = true;
             this.lnklblSignUp.Location = new System.Drawing.Point(58, 455);
             this.lnklblSignUp.Name = "lnklblSignUp";
@@ -121,7 +125,9 @@
             this.Controls.Add(this.txtbxEmail);
             this.Controls.Add(this.lblSignIn);
             this.Controls.Add(this.btnSubmit);
+            this.MaximizeBox = false;
             this.Name = "SignInForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SignInForm";
             ((System.ComponentModel.ISupportInitialize)(this.imgLogo)).EndInit();
             this.ResumeLayout(false);

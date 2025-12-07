@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChatPage));
             this.lstbxChats = new System.Windows.Forms.ListBox();
-            this.textChatbackground = new System.Windows.Forms.PictureBox();
             this.btnProfile = new System.Windows.Forms.Button();
             this.pnlMessageItems = new System.Windows.Forms.Panel();
             this.btnClearChat = new System.Windows.Forms.Button();
@@ -45,7 +44,8 @@
             this.btnResetPrompt = new System.Windows.Forms.Button();
             this.btnSetPrompt = new System.Windows.Forms.Button();
             this.lblEnterPersonalisation = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.textChatbackground)).BeginInit();
+            this.btnAddLLM = new System.Windows.Forms.Button();
+            this.btnFriends = new System.Windows.Forms.Button();
             this.pnlMessageItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chatBack)).BeginInit();
             this.pnlPersonalisation.SuspendLayout();
@@ -53,7 +53,10 @@
             // 
             // lstbxChats
             // 
+            this.lstbxChats.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.lstbxChats.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lstbxChats.Cursor = System.Windows.Forms.Cursors.Default;
             this.lstbxChats.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.lstbxChats.Font = new System.Drawing.Font("Arial Rounded MT Bold", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstbxChats.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
@@ -64,27 +67,18 @@
             this.lstbxChats.Name = "lstbxChats";
             this.lstbxChats.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.lstbxChats.ScrollAlwaysVisible = true;
-            this.lstbxChats.Size = new System.Drawing.Size(287, 544);
+            this.lstbxChats.Size = new System.Drawing.Size(287, 484);
             this.lstbxChats.TabIndex = 0;
             this.lstbxChats.SelectedIndexChanged += new System.EventHandler(this.lstbxChats_SelectedIndexChanged);
             // 
-            // textChatbackground
-            // 
-            this.textChatbackground.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.textChatbackground.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textChatbackground.Location = new System.Drawing.Point(292, -1);
-            this.textChatbackground.Name = "textChatbackground";
-            this.textChatbackground.Size = new System.Drawing.Size(579, 539);
-            this.textChatbackground.TabIndex = 1;
-            this.textChatbackground.TabStop = false;
-            // 
             // btnProfile
             // 
+            this.btnProfile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnProfile.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.btnProfile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnProfile.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnProfile.Font = new System.Drawing.Font("Britannic Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnProfile.Location = new System.Drawing.Point(981, 12);
+            this.btnProfile.Location = new System.Drawing.Point(977, 10);
             this.btnProfile.Name = "btnProfile";
             this.btnProfile.Size = new System.Drawing.Size(63, 54);
             this.btnProfile.TabIndex = 2;
@@ -94,6 +88,9 @@
             // 
             // pnlMessageItems
             // 
+            this.pnlMessageItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlMessageItems.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.pnlMessageItems.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlMessageItems.Controls.Add(this.btnClearChat);
@@ -110,6 +107,8 @@
             // 
             // btnClearChat
             // 
+            this.btnClearChat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearChat.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnClearChat.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClearChat.Location = new System.Drawing.Point(440, 15);
             this.btnClearChat.Name = "btnClearChat";
@@ -121,6 +120,9 @@
             // 
             // flowpnlChat
             // 
+            this.flowpnlChat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flowpnlChat.AutoScroll = true;
             this.flowpnlChat.BackColor = System.Drawing.Color.Gainsboro;
             this.flowpnlChat.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -146,6 +148,9 @@
             // 
             // chatBack
             // 
+            this.chatBack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chatBack.BackColor = System.Drawing.Color.Gainsboro;
             this.chatBack.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.chatBack.Location = new System.Drawing.Point(-1, 70);
@@ -156,6 +161,8 @@
             // 
             // txtbxMessage
             // 
+            this.txtbxMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtbxMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtbxMessage.Location = new System.Drawing.Point(45, 493);
             this.txtbxMessage.Multiline = true;
@@ -166,6 +173,8 @@
             // 
             // btnSend
             // 
+            this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSend.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSend.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSend.Location = new System.Drawing.Point(492, 489);
             this.btnSend.Name = "btnSend";
@@ -187,6 +196,7 @@
             // 
             // pnlPersonalisation
             // 
+            this.pnlPersonalisation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlPersonalisation.Controls.Add(this.lblExamplePrompt);
             this.pnlPersonalisation.Controls.Add(this.btnResetPrompt);
             this.pnlPersonalisation.Controls.Add(this.btnSetPrompt);
@@ -200,6 +210,9 @@
             // 
             // lblExamplePrompt
             // 
+            this.lblExamplePrompt.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblExamplePrompt.AutoSize = true;
             this.lblExamplePrompt.BackColor = System.Drawing.SystemColors.Window;
             this.lblExamplePrompt.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -212,6 +225,10 @@
             // 
             // btnResetPrompt
             // 
+            this.btnResetPrompt.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetPrompt.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnResetPrompt.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnResetPrompt.Location = new System.Drawing.Point(18, 286);
             this.btnResetPrompt.Name = "btnResetPrompt";
@@ -223,6 +240,10 @@
             // 
             // btnSetPrompt
             // 
+            this.btnSetPrompt.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSetPrompt.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSetPrompt.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSetPrompt.Location = new System.Drawing.Point(109, 286);
             this.btnSetPrompt.Name = "btnSetPrompt";
@@ -234,6 +255,9 @@
             // 
             // lblEnterPersonalisation
             // 
+            this.lblEnterPersonalisation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblEnterPersonalisation.AutoSize = true;
             this.lblEnterPersonalisation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEnterPersonalisation.Location = new System.Drawing.Point(0, 2);
@@ -243,22 +267,49 @@
             this.lblEnterPersonalisation.Text = "Enter your custom prompt!";
             this.lblEnterPersonalisation.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // btnAddLLM
+            // 
+            this.btnAddLLM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAddLLM.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAddLLM.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddLLM.Location = new System.Drawing.Point(35, 490);
+            this.btnAddLLM.Name = "btnAddLLM";
+            this.btnAddLLM.Size = new System.Drawing.Size(201, 41);
+            this.btnAddLLM.TabIndex = 9;
+            this.btnAddLLM.Text = "Add AI Companion";
+            this.btnAddLLM.UseVisualStyleBackColor = true;
+            // 
+            // btnFriends
+            // 
+            this.btnFriends.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFriends.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.btnFriends.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnFriends.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnFriends.Font = new System.Drawing.Font("Britannic Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFriends.Location = new System.Drawing.Point(895, 10);
+            this.btnFriends.Name = "btnFriends";
+            this.btnFriends.Size = new System.Drawing.Size(63, 54);
+            this.btnFriends.TabIndex = 10;
+            this.btnFriends.Text = "Friends";
+            this.btnFriends.UseVisualStyleBackColor = false;
+            // 
             // ChatPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1056, 538);
+            this.Controls.Add(this.btnFriends);
+            this.Controls.Add(this.btnAddLLM);
             this.Controls.Add(this.pnlPersonalisation);
             this.Controls.Add(this.pnlMessageItems);
             this.Controls.Add(this.btnProfile);
-            this.Controls.Add(this.textChatbackground);
             this.Controls.Add(this.lstbxChats);
             this.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.Name = "ChatPage";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ChatPage";
             this.Load += new System.EventHandler(this.ChatPage_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.textChatbackground)).EndInit();
             this.pnlMessageItems.ResumeLayout(false);
             this.pnlMessageItems.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chatBack)).EndInit();
@@ -271,7 +322,6 @@
         #endregion
 
         private System.Windows.Forms.ListBox lstbxChats;
-        private System.Windows.Forms.PictureBox textChatbackground;
         private System.Windows.Forms.Button btnProfile;
         private System.Windows.Forms.Panel pnlMessageItems;
         private System.Windows.Forms.TextBox txtbxMessage;
@@ -286,5 +336,7 @@
         private System.Windows.Forms.Button btnSetPrompt;
         private System.Windows.Forms.Button btnClearChat;
         private System.Windows.Forms.Label lblExamplePrompt;
+        private System.Windows.Forms.Button btnAddLLM;
+        private System.Windows.Forms.Button btnFriends;
     }
 }
