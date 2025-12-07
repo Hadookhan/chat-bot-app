@@ -124,7 +124,7 @@ def get_system_prompt(bot_name: str, custom_system_prompt: str | None = None) ->
             "2. Encourage the user and avoid being mean.\n"
             "3. Be concise and clear.\n"
         )
-    elif bot_name == "Peronalisable":
+    elif bot_name == "Personalisable":
         return custom_system_prompt or (
             "You are a configurable assistant. Be helpful, polite and safe.\n"
         )

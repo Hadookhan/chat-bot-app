@@ -40,7 +40,7 @@ namespace chatbot_app_desk
             //});
 
             // Preset LLM conversations
-            var personalisable = new Conversation { PersonName = "Peronalisable" };
+            var personalisable = new Conversation { PersonName = "Personalisable" };
             var bob = new Conversation { PersonName = "Bob" };
             var alice = new Conversation { PersonName = "Alice" };
 
@@ -63,7 +63,7 @@ namespace chatbot_app_desk
                 message = userMessage,
                 userid = userId,
                 timestamp = DateTime.UtcNow.ToString("o"),
-                system_prompt = botName == "Peronalisable"
+                system_prompt = botName == "Personalisable"
                     ? txtBoxPersonalise.Text
                     : null
             };
@@ -79,9 +79,9 @@ namespace chatbot_app_desk
             {
                 content.Headers.Add("X-Bot-Name", "Alice");
             }
-            else if (botName == "Peronalisable")
+            else if (botName == "Personalisable")
             {
-                content.Headers.Add("X-Bot-Name", "Peronalisable");
+                content.Headers.Add("X-Bot-Name", "Personalisable");
             }
 
             var response = await _httpClient.PostAsync("/api/llm/chat", content);
@@ -116,7 +116,7 @@ namespace chatbot_app_desk
 
             flowpnlChat.Controls.Clear();
 
-            if (conv.PersonName == "Peronalisable")
+            if (conv.PersonName == "Personalisable")
             {
                 pnlPersonalisation.Visible = true;
                 foreach (var m in conv.Messages)
