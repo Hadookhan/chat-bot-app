@@ -32,13 +32,6 @@ namespace chatbot_app_desk
             _currentUserId = currentUserId;
             _username = username;
 
-            //lstbxChats.Items.Add(new ChatItem 
-            //{ Text = "Your Chat Bot", 
-            //  BackColor = Color.DarkKhaki,
-            //  ForeColor = Color.Black,
-            //  Font = new Font("Arial", 20, FontStyle.Italic)
-            //});
-
             // Preset LLM conversations
             var personalisable = new Conversation { PersonName = "Personalisable" };
             var bob = new Conversation { PersonName = "Bob" };
@@ -425,58 +418,4 @@ namespace chatbot_app_desk
             }
         }
     }
-
-    //public class ChatItem
-    //{
-    //    public string Text { get; set; }
-    //    public Color BackColor { get; set; } = Color.LightBlue;
-    //    public Color ForeColor { get; set; } = Color.Black;
-    //    public Font Font { get; set; } = SystemFonts.DefaultFont;
-
-    //    public override string ToString() => Text; // use for debugger
-    //}
-
-    public class ChatMessage
-    {
-        public bool IsMe { get; set; }      // true = you, false = other person
-        public string Text { get; set; }
-        public DateTime Time { get; set; }
-    }
-
-    public class Conversation
-    {
-        public string PersonName { get; set; }
-        public List<ChatMessage> Messages { get; } = new List<ChatMessage>();
-
-        public override string ToString() => PersonName;   // what shows in lstbxChats
-    }
-
-    public class LlmChatRequest
-    {
-        public string message { get; set; }
-        public string userid { get; set; }
-        public string timestamp { get; set; }
-        public string system_prompt { get; set; }  // for personalisable bot
-    }
-
-    public class LlmChatResponse
-    {
-        public string userid { get; set; }
-        public string timestamp { get; set; }
-        public string message { get; set; }
-        public string reply { get; set; }
-
-        public string error { get; set; }  // if your API returns {"error": "..."}
-    }
-
-    public class ChatLogEntry
-    {
-        public string user_id { get; set; }
-        public string bot_name { get; set; }
-        public string timestamp { get; set; }
-        public string user_message { get; set; }
-        public string bot_reply { get; set; }
-    }
-
-
 }
