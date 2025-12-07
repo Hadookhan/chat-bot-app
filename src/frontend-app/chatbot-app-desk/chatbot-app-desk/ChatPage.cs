@@ -316,6 +316,15 @@ namespace chatbot_app_desk
             flowpnlChat.ResumeLayout();
         }
 
+        private void btnSetPrompt_Click(object sender, EventArgs e)
+        {
+            txtBoxPersonalise.Text = txtBoxPersonalise.Text;
+        }
+
+        private void btnResetPrompt_Click(object sender, EventArgs e)
+        {
+            txtBoxPersonalise.Text = "";
+        }
     }
 
     //public class ChatItem

@@ -40,6 +40,8 @@
             this.txtBoxPersonalise = new System.Windows.Forms.TextBox();
             this.pnlPersonalisation = new System.Windows.Forms.Panel();
             this.lblEnterPersonalisation = new System.Windows.Forms.Label();
+            this.btnSetPrompt = new System.Windows.Forms.Button();
+            this.btnResetPrompt = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.textChatbackground)).BeginInit();
             this.pnlMessageItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chatBack)).BeginInit();
@@ -75,8 +77,10 @@
             // 
             // btnProfile
             // 
-            this.btnProfile.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.btnProfile.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.btnProfile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnProfile.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnProfile.Font = new System.Drawing.Font("Britannic Bold", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnProfile.Location = new System.Drawing.Point(981, 12);
             this.btnProfile.Name = "btnProfile";
             this.btnProfile.Size = new System.Drawing.Size(63, 54);
@@ -115,10 +119,11 @@
             // 
             this.lblChatName.AutoSize = true;
             this.lblChatName.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.lblChatName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblChatName.Font = new System.Drawing.Font("Arial Rounded MT Bold", 27.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChatName.Location = new System.Drawing.Point(181, 9);
+            this.lblChatName.Location = new System.Drawing.Point(3, 12);
             this.lblChatName.Name = "lblChatName";
-            this.lblChatName.Size = new System.Drawing.Size(225, 43);
+            this.lblChatName.Size = new System.Drawing.Size(227, 45);
             this.lblChatName.TabIndex = 6;
             this.lblChatName.Text = "chatPerson";
             this.lblChatName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -160,11 +165,13 @@
             this.txtBoxPersonalise.Location = new System.Drawing.Point(18, 24);
             this.txtBoxPersonalise.Multiline = true;
             this.txtBoxPersonalise.Name = "txtBoxPersonalise";
-            this.txtBoxPersonalise.Size = new System.Drawing.Size(154, 305);
+            this.txtBoxPersonalise.Size = new System.Drawing.Size(154, 250);
             this.txtBoxPersonalise.TabIndex = 4;
             // 
             // pnlPersonalisation
             // 
+            this.pnlPersonalisation.Controls.Add(this.btnResetPrompt);
+            this.pnlPersonalisation.Controls.Add(this.btnSetPrompt);
             this.pnlPersonalisation.Controls.Add(this.lblEnterPersonalisation);
             this.pnlPersonalisation.Controls.Add(this.txtBoxPersonalise);
             this.pnlPersonalisation.Location = new System.Drawing.Point(872, 198);
@@ -183,6 +190,28 @@
             this.lblEnterPersonalisation.TabIndex = 6;
             this.lblEnterPersonalisation.Text = "Enter your custom prompt!";
             this.lblEnterPersonalisation.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // btnSetPrompt
+            // 
+            this.btnSetPrompt.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSetPrompt.Location = new System.Drawing.Point(109, 286);
+            this.btnSetPrompt.Name = "btnSetPrompt";
+            this.btnSetPrompt.Size = new System.Drawing.Size(63, 33);
+            this.btnSetPrompt.TabIndex = 7;
+            this.btnSetPrompt.Text = "Set";
+            this.btnSetPrompt.UseVisualStyleBackColor = true;
+            this.btnSetPrompt.Click += new System.EventHandler(this.btnSetPrompt_Click);
+            // 
+            // btnResetPrompt
+            // 
+            this.btnResetPrompt.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnResetPrompt.Location = new System.Drawing.Point(18, 286);
+            this.btnResetPrompt.Name = "btnResetPrompt";
+            this.btnResetPrompt.Size = new System.Drawing.Size(63, 33);
+            this.btnResetPrompt.TabIndex = 8;
+            this.btnResetPrompt.Text = "Reset";
+            this.btnResetPrompt.UseVisualStyleBackColor = true;
+            this.btnResetPrompt.Click += new System.EventHandler(this.btnResetPrompt_Click);
             // 
             // ChatPage
             // 
@@ -223,5 +252,7 @@
         private System.Windows.Forms.TextBox txtBoxPersonalise;
         private System.Windows.Forms.Panel pnlPersonalisation;
         private System.Windows.Forms.Label lblEnterPersonalisation;
+        private System.Windows.Forms.Button btnResetPrompt;
+        private System.Windows.Forms.Button btnSetPrompt;
     }
 }
