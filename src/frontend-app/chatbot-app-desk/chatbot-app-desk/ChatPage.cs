@@ -10,7 +10,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using Microsoft.Web.WebView2;
+using Microsoft.Web.WebView2.WinForms;
 
 namespace chatbot_app_desk
 {
@@ -160,6 +161,13 @@ namespace chatbot_app_desk
                 lstbxChats.SelectedIndex = 0;
                 RenderConversation(_conversations[0]);
             }
+
+            flowpnlChat.HorizontalScroll.Maximum = 0;
+            flowpnlChat.HorizontalScroll.Visible = false;
+            flowpnlChat.HorizontalScroll.Enabled = false;
+
+            flowpnlChat.AutoScroll = false;
+            flowpnlChat.AutoScroll = true;
         }
 
         private void lstbxChats_SelectedIndexChanged(object sender, EventArgs e)
@@ -178,64 +186,34 @@ namespace chatbot_app_desk
             if (conv.PersonName == "Personalisable")
             {
                 pnlPersonalisation.Visible = true;
-                foreach (var m in conv.Messages)
-                {
-                    var lbl = new Label();
-                    lbl.AutoSize = true;
-                    lbl.MaximumSize = new Size(flowpnlChat.ClientSize.Width - 40, 0); // wrap text
-                    lbl.Text = m.Text;
-                    lbl.Padding = new Padding(8);
-                    lbl.BorderStyle = BorderStyle.FixedSingle;
-
-                    if (m.IsMe)
-                    {
-                        // Right-aligned bubble
-                        lbl.BackColor = Color.LightGreen;
-                        lbl.TextAlign = ContentAlignment.MiddleRight;
-                        lbl.Anchor = AnchorStyles.Right;
-                        lbl.Margin = new Padding(50, 5, 5, 5);
-                    }
-                    else
-                    {
-                        // Left-aligned bubble
-                        lbl.BackColor = Color.White;
-                        lbl.TextAlign = ContentAlignment.MiddleLeft;
-                        lbl.Margin = new Padding(5, 5, 50, 5);
-                    }
-
-                    flowpnlChat.Controls.Add(lbl);
-                }
             }
 
-            if (conv.PersonName == "Bob" || conv.PersonName == "Alice" || conv.PersonName == "Mrs Wong")
+            foreach (var m in conv.Messages)
             {
-                foreach (var m in conv.Messages)
+                var lbl = new Label();
+                lbl.AutoSize = true;
+                lbl.MaximumSize = new Size(flowpnlChat.ClientSize.Width - 40, 0); // wrap text
+                lbl.Text = m.Text;
+                lbl.Padding = new Padding(8);
+                lbl.BorderStyle = BorderStyle.FixedSingle;
+
+                if (m.IsMe)
                 {
-                    var lbl = new Label();
-                    lbl.AutoSize = true;
-                    lbl.MaximumSize = new Size(flowpnlChat.ClientSize.Width - 40, 0); // wrap text
-                    lbl.Text = m.Text;
-                    lbl.Padding = new Padding(8);
-                    lbl.BorderStyle = BorderStyle.FixedSingle;
-
-                    if (m.IsMe)
-                    {
-                        // Right-aligned bubble
-                        lbl.BackColor = Color.LightGreen;
-                        lbl.TextAlign = ContentAlignment.MiddleRight;
-                        lbl.Anchor = AnchorStyles.Right;
-                        lbl.Margin = new Padding(50, 5, 5, 5);
-                    }
-                    else
-                    {
-                        // Left-aligned bubble
-                        lbl.BackColor = Color.White;
-                        lbl.TextAlign = ContentAlignment.MiddleLeft;
-                        lbl.Margin = new Padding(5, 5, 50, 5);
-                    }
-
-                    flowpnlChat.Controls.Add(lbl);
+                    // Right-aligned bubble
+                    lbl.BackColor = Color.LightGreen;
+                    lbl.TextAlign = ContentAlignment.MiddleRight;
+                    lbl.Anchor = AnchorStyles.Right;
+                    lbl.Margin = new Padding(50, 5, 5, 5);
                 }
+                else
+                {
+                    // Left-aligned bubble
+                    lbl.BackColor = Color.White;
+                    lbl.TextAlign = ContentAlignment.MiddleLeft;
+                    lbl.Margin = new Padding(5, 5, 50, 5);
+                }
+
+                flowpnlChat.Controls.Add(lbl);
             }
 
             if (flowpnlChat.Controls.Count > 0)
@@ -316,6 +294,7 @@ namespace chatbot_app_desk
                     Time = DateTime.Now
                 });
                 RenderConversation(conv);
+
             }
             catch (Exception ex)
             {
@@ -377,7 +356,6 @@ namespace chatbot_app_desk
 
         private void btnSetPrompt_Click(object sender, EventArgs e)
         {
-            txtBoxPersonalise.Text = txtBoxPersonalise.Text;
             txtBoxPersonalise.ReadOnly = true;
         }
 
