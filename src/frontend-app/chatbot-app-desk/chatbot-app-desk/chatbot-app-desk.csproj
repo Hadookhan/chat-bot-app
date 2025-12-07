@@ -79,12 +79,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatLogEntry.cs" />
+    <Compile Include="ChatMessage.cs" />
     <Compile Include="ChatPage.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ChatPage.Designer.cs">
       <DependentUpon>ChatPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Conversation.cs" />
+    <Compile Include="LlmChatRequest.cs" />
+    <Compile Include="LlmChatResponse.cs" />
     <Compile Include="SignInForm.cs">
       <SubType>Form</SubType>
     </Compile>

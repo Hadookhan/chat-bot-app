@@ -36,10 +36,12 @@ namespace chatbot_app_desk
             var personalisable = new Conversation { PersonName = "Personalisable" };
             var bob = new Conversation { PersonName = "Bob" };
             var alice = new Conversation { PersonName = "Alice" };
+            var mrsWong = new Conversation { PersonName = "Mrs Wong" };
 
             _conversations.Add(personalisable);
             _conversations.Add(bob);
             _conversations.Add(alice);
+            _conversations.Add(mrsWong);
 
             lstbxChats.DataSource = _conversations;
         }
@@ -196,7 +198,7 @@ namespace chatbot_app_desk
                 }
             }
 
-            if (conv.PersonName == "Bob" || conv.PersonName == "Alice")
+            if (conv.PersonName == "Bob" || conv.PersonName == "Alice" || conv.PersonName == "Mrs Wong")
             {
                 foreach (var m in conv.Messages)
                 {
