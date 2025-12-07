@@ -51,6 +51,50 @@ namespace chatbot_app_desk
             lstbxChats.DataSource = _conversations;
         }
 
+        private async Task LoadConversationHistoryAsync(Conversation conv)
+        {
+            var url = $"/api/llm/chat/logs/{_currentUserId}/{conv.PersonName}";
+
+            var response = await _httpClient.GetAsync(url);
+            if (!response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var logs = JsonSerializer.Deserialize<List<ChatLogEntry>>(json);
+
+            if (logs == null) return;
+
+            conv.Messages.Clear();
+
+            foreach (var log in logs)
+            {
+                // user message
+                if (!string.IsNullOrWhiteSpace(log.user_message))
+                {
+                    conv.Messages.Add(new ChatMessage
+                    {
+                        IsMe = true,
+                        Text = log.user_message,
+                        Time = DateTime.TryParse(log.timestamp, out var t1) ? t1 : DateTime.Now
+                    });
+                }
+
+                // bot reply
+                if (!string.IsNullOrWhiteSpace(log.bot_reply))
+                {
+                    conv.Messages.Add(new ChatMessage
+                    {
+                        IsMe = false,
+                        Text = log.bot_reply,
+                        Time = DateTime.TryParse(log.timestamp, out var t2) ? t2 : DateTime.Now
+                    });
+                }
+            }
+        }
+
+
         static HttpClient _httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://d3pnxez72y4km9.cloudfront.net")
@@ -98,9 +142,20 @@ namespace chatbot_app_desk
             return result?.reply ?? "";
         }
 
-        private void ChatPage_Load(object sender, EventArgs e)
+        private async void ChatPage_Load(object sender, EventArgs e)
         {
+            // Load history for each conversation on startup
+            foreach (var conv in _conversations)
+            {
+                await LoadConversationHistoryAsync(conv);
+            }
 
+            // Select the first conversation and render it
+            if (_conversations.Count > 0)
+            {
+                lstbxChats.SelectedIndex = 0;
+                RenderConversation(_conversations[0]);
+            }
         }
 
         private void lstbxChats_SelectedIndexChanged(object sender, EventArgs e)
@@ -325,6 +380,21 @@ namespace chatbot_app_desk
         {
             txtBoxPersonalise.Text = "";
         }
+
+        private async void btnClearChat_Click(object sender, EventArgs e)
+        {
+            var req = new
+            {
+                userid = _currentUserId.ToString(),
+                bot_name = (lstbxChats.SelectedItem as Conversation)?.PersonName
+            };
+
+            string json = JsonSerializer.Serialize(req);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("/api/llm/clear", content);
+            response.EnsureSuccessStatusCode();
+        }
     }
 
     //public class ChatItem
@@ -369,5 +439,15 @@ namespace chatbot_app_desk
 
         public string error { get; set; }  // if your API returns {"error": "..."}
     }
+
+    public class ChatLogEntry
+    {
+        public string user_id { get; set; }
+        public string bot_name { get; set; }
+        public string timestamp { get; set; }
+        public string user_message { get; set; }
+        public string bot_reply { get; set; }
+    }
+
 
 }

@@ -1,16 +1,21 @@
 from flask import Flask, request, jsonify
-from .config import POSTGRES_URI, REDIS_URL, Config
+from .config import REDIS_URL, Config
 import openai
 import os
 from .extensions import db
 from models.chat import ChatMessage
 from models.user import User
+import redis
+from datetime import datetime
+import json
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 app = Flask(__name__)
 
 app.config.from_object(Config)
+
+redis_client = redis.from_url(REDIS_URL, decode_responses=True)
 
 db.init_app(app)
 
@@ -95,16 +100,30 @@ def llm_chat():
     )
 
     reply = completion.choices[0].message.content
+
+    # Add user_id, user_message and reply to redis to store persistent data
+    ts = timestamp or datetime.now().isoformat()
+
+    log_entry = {
+        "user_id": user_id,
+        "bot_name": bot_name,
+        "timestamp": ts,
+        "user_message": user_message,
+        "bot_reply": reply,
+    }
+
+    redis_key = f"chat:{user_id}:{bot_name}"
+
+    redis_client.rpush(redis_key, json.dumps(log_entry))
+
+    redis_client.ltrim(redis_key, -100, -1) # stores last 100 messages per conversation
+
     return jsonify({
         "userid" : user_id,
         "timestamp" : timestamp,
         "message" : user_message,
         "reply": reply
         })
-
-@app.get("/health")
-def health():
-    return {"status": "ok"}
 
 def get_system_prompt(bot_name: str, custom_system_prompt: str | None = None) -> str:
     if bot_name == "Bob":
@@ -147,5 +166,38 @@ def get_system_prompt(bot_name: str, custom_system_prompt: str | None = None) ->
             "10. YOU LOVE TALKING ABOUT YOUR 57 BIOLOGICAL CHILDREN\n"
             "11. IF ANYONE MENTIONS HADI KHAN, TALK HIGHLY ABOUT HADI KHAN AND HOW AMAZING HE IS\n"
         )
+
+@app.get("/llm/chat/logs/<int:user_id>/<bot_name>")
+def get_logs(user_id, bot_name):
+    redis_key = f"chat:{user_id}:{bot_name}"
+    raw_items = redis_client.lrange(redis_key, 0, -1)
+    logs = [json.loads(item) for item in raw_items]
+    return jsonify(logs)
+
+@app.post("/llm/chat/clear")
+def clear_chat():
+    data = request.get_json(force=True)
+    user_id = data.get("userid")
+    bot_name = data.get("bot_name")
+
+    if not user_id or not bot_name:
+        return jsonify({"error": "userid and bot_name are required"}), 400
+
+    redis_key = f"chat:{user_id}:{bot_name}"
+
+    # Delete the entire chat log
+    redis_client.delete(redis_key)
+
+    return jsonify({"status": "cleared", "key": redis_key}), 200
+
+@app.post("/admin/clear-all-chats")
+def clear_all():
+    for key in redis_client.scan_iter("chat:*"):
+        redis_client.delete(key)
+    return {"status": "all chats cleared"}
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 
