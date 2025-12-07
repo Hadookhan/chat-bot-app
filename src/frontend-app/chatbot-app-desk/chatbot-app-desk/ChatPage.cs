@@ -4,12 +4,13 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Http;
-using System.Text.Json;
-using System.Net.Http.Json;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace chatbot_app_desk
 {
@@ -17,14 +18,19 @@ namespace chatbot_app_desk
     public partial class ChatPage : Form
     {
 
+        private readonly int _currentUserId;
+        private readonly string _username;
         private readonly List<Conversation> _conversations = new List<Conversation>();
-        public ChatPage()
+        public ChatPage(int currentUserId, string username)
         {
             InitializeComponent();
 
             lstbxChats.DrawMode = DrawMode.OwnerDrawFixed;
             lstbxChats.DrawItem += lstbxChats_DrawItem;
             lstbxChats.ItemHeight = 40;
+
+            _currentUserId = currentUserId;
+            _username = username;
 
             //lstbxChats.Items.Add(new ChatItem 
             //{ Text = "Your Chat Bot", 
@@ -171,8 +177,6 @@ namespace chatbot_app_desk
         {
 
         }
-
-        private string currentUserId = "10";
         private async void btnSend_Click_1(object sender, EventArgs e)
         {
             var text = txtbxMessage.Text.Trim();
@@ -194,7 +198,7 @@ namespace chatbot_app_desk
             try
             {
                 // 2) Send to API
-                string reply = await SendToLlmAsync(text, currentUserId);
+                string reply = await SendToLlmAsync(text, _currentUserId.ToString());
 
                 // 3) Add bot reply and re-render
                 conv.Messages.Add(new ChatMessage

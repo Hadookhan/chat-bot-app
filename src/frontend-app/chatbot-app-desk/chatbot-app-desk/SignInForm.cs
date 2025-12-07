@@ -103,9 +103,13 @@ namespace chatbot_app_desk
 
             try
             {
-                var location = await LoginUser(user);
+                var loginResp = await LoginUser(user);
                 MessageBox.Show("Login successful!");
-                using (var chatPage = new ChatPage())
+
+                int currentUserId = loginResp.user_id;
+                string username = loginResp.username;
+
+                using (var chatPage = new ChatPage(currentUserId, username))
                 {
                     this.Hide();
                     chatPage.ShowDialog();
@@ -118,13 +122,26 @@ namespace chatbot_app_desk
             }
         }
 
-        static async Task<Uri> LoginUser(User user)
+        public class LoginResponse
         {
+            public string message { get; set; }
+            public int user_id { get; set; }
+            public string username { get; set; }
+            public string error { get; set; }   // for error responses
+        }
 
+        static async Task<LoginResponse> LoginUser(User user)
+        {
             HttpResponseMessage response = await client.PostAsJsonAsync("/api/login", user);
-            response.EnsureSuccessStatusCode();
 
-            return response.Headers.Location;
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResp = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                throw new Exception(errorResp?.error ?? "Login failed");
+            }
+
+            var loginResp = await response.Content.ReadFromJsonAsync<LoginResponse>();
+            return loginResp;
         }
     }
 }
