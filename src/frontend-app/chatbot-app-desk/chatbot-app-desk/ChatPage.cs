@@ -118,6 +118,10 @@ namespace chatbot_app_desk
             {
                 content.Headers.Add("X-Bot-Name", "Alice");
             }
+            else if (botName == "Mrs Wong")
+            {
+                content.Headers.Add("X-Bot-Name", "Mrs Wong");
+            }
             else if (botName == "Personalisable")
             {
                 content.Headers.Add("X-Bot-Name", "Personalisable");
