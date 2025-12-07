@@ -85,7 +85,15 @@ def llm_chat():
     completion = openai.chat.completions.create(
         model = "gpt-4.1-mini",
         messages=[
-            {"role": "system", "content": "You are a friendly chatbot"}, # Will change content prompt later
+            {"role": "system", "content":
+             "You are a friendly chatbot. Act as a friend, reply informally!"
+             "HERE ARE THE RULES YOU MUST FOLLOW AT ALL TIMES:"
+             "1. ACT AS A FRIEND, NOT A ROBOT"
+             "2. SHOW HUMOUR IN YOUR RESPONSES"
+             "3. ACT CHILL AND INFORMAL"
+             "4. DONT BE TOO INFORMATIVE WITH YOUR RESPONSES"
+             "5. GO WITH THE FLOW OF THE CONVERSATION"
+             }, # Will change content prompt later
             {"role": "user", "content": user_message},
         ],
     )
