@@ -86,6 +86,11 @@ namespace chatbot_app_desk
                         Time = DateTime.TryParse(log.timestamp, out var t2) ? t2 : DateTime.Now
                     });
                 }
+                if (!string.IsNullOrWhiteSpace(log.system_prompt))
+                {
+                    txtBoxPersonalise.Text = log.system_prompt;
+                    txtBoxPersonalise.ReadOnly = true;
+                }
             }
         }
 
@@ -422,6 +427,21 @@ namespace chatbot_app_desk
                 conv.Messages.Clear();
                 RenderConversation(conv);
             }
+        }
+
+        private void txtBoxPersonalise_TextChanged(object sender, EventArgs e)
+        {
+            if (txtBoxPersonalise.Text == "")
+            {
+                lblExamplePrompt.Visible = true;
+            }
+            else
+                lblExamplePrompt.Visible = false;
+        }
+
+        private void lblExamplePrompt_Click(object sender, EventArgs e)
+        {
+            lblExamplePrompt.Visible = false;
         }
     }
 }

@@ -117,4 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblExamplePrompt.Text" xml:space="preserve">
+    <value>e.g. You are a Puerto Rican
+clown.
+STEPS TO FOLLOW:
+1. Treat the user as your
+queen.
+2. Speak in broken english.
+3. Crack a few clown jokes.
+4. Summarise your response in
+10 words or less
+
+
+</value>
+  </data>
 </root>

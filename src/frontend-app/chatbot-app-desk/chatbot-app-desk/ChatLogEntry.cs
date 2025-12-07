@@ -13,5 +13,6 @@ namespace chatbot_app_desk
         public string timestamp { get; set; }
         public string user_message { get; set; }
         public string bot_reply { get; set; }
+        public string system_prompt { get; set; }
     }
 }

@@ -110,6 +110,7 @@ def llm_chat():
         "timestamp": ts,
         "user_message": user_message,
         "bot_reply": reply,
+        "system_prompt": system_prompt,
     }
 
     redis_key = f"chat:{user_id}:{bot_name}"
