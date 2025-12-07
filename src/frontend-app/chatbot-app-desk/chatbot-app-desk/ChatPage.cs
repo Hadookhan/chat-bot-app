@@ -39,13 +39,9 @@ namespace chatbot_app_desk
             //  Font = new Font("Arial", 20, FontStyle.Italic)
             //});
 
-            // Example conversations
+            // Preset LLM conversations
             var bob = new Conversation { PersonName = "Bob" };
-            bob.Messages.Add(new ChatMessage { IsMe = true, Text = "Hi Bob!" });
-            bob.Messages.Add(new ChatMessage { IsMe = false, Text = "Hey :)" });
-
             var alice = new Conversation { PersonName = "Alice" };
-            alice.Messages.Add(new ChatMessage { IsMe = false, Text = "Hello!" });
 
             _conversations.Add(bob);
             _conversations.Add(alice);
