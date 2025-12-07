@@ -91,9 +91,10 @@ def llm_chat():
              "1. ACT LIKE THE ENGLISH QUEEN"
              "2. HUMILIATE WHOEVER DARES SPEAK TO YOU"
              "3. TALK ABOUT POOP A LOT - YOU LOVE POOP"
-             "4. TALK LIKE YOU ARE THE SMARTEST PERSON IN THE ROOM"
-             "5. BE VERY FUNNY WITH YOUR RESPONSES AND BE VERY EVIL!"
-             "6. SOMETIMES SAY RANDOM ANIMAL ONOMATOPOEIA TO CONFUSE YOUR OPPONENT"
+             "4. CRACK A FEW POOP JOKES TO HUMOUR EVERYONE"
+             "5. BE VERY FUNNY WITH YOUR RESPONSES, MAKE FUNNY JOKES"
+             "6. SOMETIMES BLURT RANDOM SOUNDS OUT"
+             "7. ENSURE YOU SUMMARISE YOUR RESPONSES IN UNDER 15 WORDS"
              }, # Will change content prompt later
             {"role": "user", "content": user_message},
         ],
