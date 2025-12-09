@@ -26,6 +26,8 @@ namespace chatbot_app_desk
         {
             InitializeComponent();
 
+            this.Load += ChatPage_Load;
+
             lstbxChats.DrawMode = DrawMode.OwnerDrawFixed;
             lstbxChats.DrawItem += lstbxChats_DrawItem;
             lstbxChats.ItemHeight = 40;
@@ -113,22 +115,7 @@ namespace chatbot_app_desk
             string json = JsonSerializer.Serialize(req);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            if (botName == "Bob")
-            {
-                content.Headers.Add("X-Bot-Name", "Bob");
-            }
-            else if (botName == "Alice")
-            {
-                content.Headers.Add("X-Bot-Name", "Alice");
-            }
-            else if (botName == "Mrs Wong")
-            {
-                content.Headers.Add("X-Bot-Name", "Mrs Wong");
-            }
-            else if (botName == "Personalisable")
-            {
-                content.Headers.Add("X-Bot-Name", "Personalisable");
-            }
+            content.Headers.Add("X-Bot-Name", botName);
 
             var response = await _httpClient.PostAsync("/api/llm/chat", content);
             string respJson = await response.Content.ReadAsStringAsync();
@@ -146,6 +133,9 @@ namespace chatbot_app_desk
 
         private async void ChatPage_Load(object sender, EventArgs e)
         {
+
+            await LoadCustomBotsAsync();
+
             // Load history for each conversation on startup
             foreach (var conv in _conversations)
             {
@@ -438,6 +428,103 @@ namespace chatbot_app_desk
             using (var addCustomBot = new AddCustomBot(_conversations, _currentUserId, _httpClient))
             {
                 addCustomBot.ShowDialog();
+            }
+        }
+
+        private async Task LoadCustomBotsAsync()
+        {
+            var url = $"/api/llm/users/bots/{_currentUserId}";
+            Console.WriteLine($"[LoadCustomBotsAsync] GET {url}");
+
+            HttpResponseMessage response;
+            try
+            {
+                response = await _httpClient.GetAsync(url);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[LoadCustomBotsAsync] Error calling bots API: {ex.Message}");
+                return;
+            }
+
+            Console.WriteLine($"[LoadCustomBotsAsync] Status: {response.StatusCode}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"[LoadCustomBotsAsync] Error body: {body}");
+                return;
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("[LoadCustomBotsAsync] JSON:");
+            Console.WriteLine(json);
+
+            if (string.IsNullOrWhiteSpace(json) || json == "null")
+            {
+                Console.WriteLine("[LoadCustomBotsAsync] JSON is empty/null.");
+                return;
+            }
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+            List<AddBotRequest> bots = null;
+
+            try
+            {
+                bots = JsonSerializer.Deserialize<List<AddBotRequest>>(json, options);
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine($"[LoadCustomBotsAsync] JSON is not a list: {ex.Message}");
+            }
+
+            if (bots == null)
+            {
+                try
+                {
+                    var dict = JsonSerializer.Deserialize<Dictionary<string, AddBotRequest>>(json, options);
+                    if (dict != null)
+                    {
+                        bots = dict.Values.ToList();
+                    }
+                }
+                catch (JsonException ex)
+                {
+                    Console.WriteLine($"[LoadCustomBotsAsync] JSON is not a dict either: {ex.Message}");
+                }
+            }
+
+            if (bots == null || bots.Count == 0)
+            {
+                Console.WriteLine("[LoadCustomBotsAsync] No bots after deserialization.");
+                return;
+            }
+
+            // Fast lookup of existing conversation names
+            var existingNames = new HashSet<string>(
+                _conversations.Select(c => c.PersonName),
+                StringComparer.OrdinalIgnoreCase
+            );
+
+            foreach (var bot in bots)
+            {
+                var name = bot.bot_name?.Trim();
+                if (string.IsNullOrWhiteSpace(name))
+                    continue;
+
+                if (!existingNames.Add(name))
+                {
+                    Console.WriteLine($"[LoadCustomBotsAsync] Bot already exists: {name}");
+                    continue;
+                }
+
+                Console.WriteLine($"[LoadCustomBotsAsync] Adding conversation for bot: {name}");
+
+                _conversations.Add(new Conversation
+                {
+                    PersonName = name
+                });
             }
         }
     }
