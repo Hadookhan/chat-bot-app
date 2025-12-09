@@ -278,6 +278,7 @@
             this.btnAddLLM.TabIndex = 9;
             this.btnAddLLM.Text = "Add AI Companion";
             this.btnAddLLM.UseVisualStyleBackColor = true;
+            this.btnAddLLM.Click += new System.EventHandler(this.btnAddLLM_Click);
             // 
             // btnFriends
             // 

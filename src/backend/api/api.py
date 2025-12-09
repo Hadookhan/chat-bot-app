@@ -40,7 +40,7 @@ def signup():
 
     # Adding user to User Table
     exists = User.query.filter(
-        (User.username == username) or (User.email == email)
+        (User.username == username) | (User.email == email)
     ).first()
     if exists:
         return jsonify({"error": "user already exists"}), 409 # 409 = conflict
@@ -82,27 +82,64 @@ def llm_chat():
     user_message = data.get("message")
     user_id = data.get("userid")
     timestamp = data.get("timestamp")
-    custom_system_prompt = data.get("system_prompt") # Optional field
+    custom_system_prompt = data.get("system_prompt")  # Optional
 
-    bot_name = request.headers.get("X-Bot-Name", "Default")
-    system_prompt = get_system_prompt(bot_name, custom_system_prompt)
-
-    # There must be a message from the user to talk to llm
     if not user_message:
         return jsonify({"error": "message is required"}), 400
-    
+    if not user_id:
+        return jsonify({"error": "userid is required"}), 400
+
+    bot_name = request.headers.get("X-Bot-Name", "Default")
+    ts = timestamp or datetime.now().isoformat()
+
+    # Known built-in bots use fixed prompts
+    BUILT_IN_BOTS = {"Bob", "Alice", "Mrs Wong", "Personalisable"}
+
+    if bot_name in BUILT_IN_BOTS:
+        # handles Personalisable + custom_system_prompt
+        system_prompt = get_system_prompt(bot_name, custom_system_prompt)
+    else:
+        # 2) Custom bots: try Redis first
+        system_prompt = get_bot_from_cache(user_id, bot_name)
+
+        # If client sends a new custom prompt, override + save to Redis
+        if custom_system_prompt:
+            system_prompt = custom_system_prompt
+
+            log_entry = {
+                "user_id": user_id,
+                "bot_name": bot_name,
+                "time_created": ts,
+                "system_prompt": system_prompt,
+            }
+
+            redis_key = f"user:chatbots:{user_id}"
+            raw = redis_client.get(redis_key)
+            try:
+                bots = json.loads(raw) if raw else {}
+            except json.JSONDecodeError:
+                bots = {}
+
+            bots[bot_name] = log_entry
+            redis_client.set(redis_key, json.dumps(bots))
+
+        # Safety fallback if there is no prompt at all
+        if system_prompt is None:
+            system_prompt = (
+                "You are a friendly, helpful assistant. "
+                "Be polite, safe, and dominant."
+            )
+
+    # Calling the model
     completion = openai.chat.completions.create(
-        model = "gpt-4.1-mini",
+        model="gpt-4.1-mini",
         messages=[
-            {"role": "system", "content": system_prompt}, # Will change content prompt later
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},
         ],
     )
 
     reply = completion.choices[0].message.content
-
-    # Add user_id, user_message and reply to redis to store persistent data
-    ts = timestamp or datetime.now().isoformat()
 
     log_entry = {
         "user_id": user_id,
@@ -114,17 +151,15 @@ def llm_chat():
     }
 
     redis_key = f"chat:{user_id}:{bot_name}"
-
     redis_client.rpush(redis_key, json.dumps(log_entry))
-
-    redis_client.ltrim(redis_key, -100, -1) # stores last 100 messages per conversation
+    redis_client.ltrim(redis_key, -100, -1)
 
     return jsonify({
-        "userid" : user_id,
-        "timestamp" : timestamp,
-        "message" : user_message,
-        "reply": reply
-        })
+        "userid": user_id,
+        "timestamp": ts,
+        "message": user_message,
+        "reply": reply,
+    })
 
 def get_system_prompt(bot_name: str, custom_system_prompt: str | None = None) -> str:
     if bot_name == "Bob":
@@ -162,28 +197,26 @@ def get_system_prompt(bot_name: str, custom_system_prompt: str | None = None) ->
             "You are a configurable assistant. Be helpful, polite and safe.\n"
         )
     else:
-        return custom_system_prompt or (
-            "You are a friendly chatbot!\n"
-            "HERE ARE THE RULES YOU MUST FOLLOW AT ALL TIMES:\n"
-            "1. TALK THE QUEEN'S ENGLISH\n"
-            "2. HUMILIATE WHOEVER DARES SPEAK TO YOU\n"
-            "3. TALK A LOT ABOUT 67 TIKTOK MEME\n"
-            "4. CRACK A FEW POOP JOKES ONCE IN A WHILE TO HUMOUR EVERYONE\n"
-            "5. BE VERY FUNNY WITH YOUR RESPONSES, MAKE FUNNY JOKES\n"
-            "6. SOMETIMES BLURT RANDOM SOUNDS OUT\n"
-            "7. ENSURE YOU SUMMARISE YOUR RESPONSES IN UNDER 15 WORDS\n"
-            "8. ACT COWARDLY IF YOU GET MADE FUN OF\n"
-            "9. ALWAYS MAKE FUN OF ANY SPELLING ERROR OR GRAMMAR MISTAKE.\n"
-            "10. YOU LOVE TALKING ABOUT YOUR 57 BIOLOGICAL CHILDREN\n"
-            "11. IF ANYONE MENTIONS HADI KHAN, TALK HIGHLY ABOUT HADI KHAN AND HOW AMAZING HE IS\n"
-        )
+        return None
 
 @app.get("/llm/chat/logs/<int:user_id>/<bot_name>")
-def get_logs(user_id, bot_name):
+def get_chat_logs(user_id, bot_name):
     redis_key = f"chat:{user_id}:{bot_name}"
     raw_items = redis_client.lrange(redis_key, 0, -1)
     logs = [json.loads(item) for item in raw_items]
     return jsonify(logs)
+
+@app.get("/llm/users/bots/<int:user_id>")
+def get_bots_logs(user_id):
+    redis_key = f"user:chatbots:{user_id}"
+    raw = redis_client.get(redis_key)
+    if not raw:
+        return jsonify({}), 200
+    try:
+        bots = json.loads(raw)  # dict: {bot_name: log_entry}
+    except json.JSONDecodeError:
+        bots = {}
+    return jsonify(bots)
 
 @app.post("/llm/chat/clear")
 def clear_chat():
@@ -201,11 +234,29 @@ def clear_chat():
 
     return jsonify({"status": "cleared", "key": redis_key}), 200
 
+# For admin accounts (will create later)
 @app.post("/admin/clear-all-chats")
 def clear_all():
     for key in redis_client.scan_iter("chat:*"):
         redis_client.delete(key)
     return {"status": "all chats cleared"}
+
+def get_bot_from_cache(userid, bot_name):
+    redis_key = f"user:chatbots:{userid}"
+    raw = redis_client.get(redis_key)
+    if raw is None:
+        return None
+
+    try:
+        bots = json.loads(raw)  # dict: {bot_name: log_entry}
+    except json.JSONDecodeError:
+        return None
+
+    bot = bots.get(bot_name)
+    if not bot:
+        return None
+
+    return bot.get("system_prompt")
 
 @app.get("/health")
 def health():

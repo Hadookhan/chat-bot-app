@@ -47,6 +47,8 @@ namespace chatbot_app_desk
             lstbxChats.DataSource = _conversations;
         }
 
+        
+
         private async Task LoadConversationHistoryAsync(Conversation conv)
         {
             var url = $"/api/llm/chat/logs/{_currentUserId}/{conv.PersonName}";
@@ -265,6 +267,12 @@ namespace chatbot_app_desk
         }
         private async void btnSend_Click_1(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtBoxPersonalise.Text))
+            {
+                MessageBox.Show("Please enter a personalise prompt.");
+                return;
+            }
+
             var text = txtbxMessage.Text.Trim();
             if (!(lstbxChats.SelectedItem is Conversation conv)) return;
             if (string.IsNullOrWhiteSpace(txtbxMessage.Text)) return;
@@ -428,6 +436,14 @@ namespace chatbot_app_desk
         private void lblExamplePrompt_Click(object sender, EventArgs e)
         {
             lblExamplePrompt.Visible = false;
+        }
+
+        private void btnAddLLM_Click(object sender, EventArgs e)
+        {
+            using (var addCustomBot = new AddCustomBot(_conversations, _currentUserId, _httpClient))
+            {
+                addCustomBot.ShowDialog();
+            }
         }
     }
 }
