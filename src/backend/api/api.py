@@ -82,7 +82,7 @@ def llm_chat():
     user_message = data.get("message")
     user_id = data.get("userid")
     timestamp = data.get("timestamp")
-    custom_system_prompt = data.get("system_prompt")  # Optional
+    custom_system_prompt = data.get("system_prompt")  # Optional field
 
     if not user_message:
         return jsonify({"error": "message is required"}), 400
@@ -92,29 +92,29 @@ def llm_chat():
     bot_name = request.headers.get("X-Bot-Name", "Default")
     ts = timestamp or datetime.now().isoformat()
 
-    # Known built-in bots use fixed prompts
     BUILT_IN_BOTS = {"Bob", "Alice", "Mrs Wong", "Personalisable"}
 
+    # Built-in bots
     if bot_name in BUILT_IN_BOTS:
-        # handles Personalisable + custom_system_prompt
         system_prompt = get_system_prompt(bot_name, custom_system_prompt)
+
+    # Custom bots
     else:
-        # 2) Custom bots: try Redis first
-        system_prompt = get_bot_from_cache(user_id, bot_name)
+        # Prefer the prompt passed in this request, otherwise Redis
+        system_prompt = custom_system_prompt or get_bot_from_cache(user_id, bot_name)
 
-        # If client sends a new custom prompt, override + save to Redis
+        # If this request includes a custom prompt, save/update the bot in Redis
         if custom_system_prompt:
-            system_prompt = custom_system_prompt
-
             log_entry = {
                 "user_id": user_id,
                 "bot_name": bot_name,
                 "time_created": ts,
-                "system_prompt": system_prompt,
+                "system_prompt": custom_system_prompt,
             }
 
             redis_key = f"user:chatbots:{user_id}"
             raw = redis_client.get(redis_key)
+
             try:
                 bots = json.loads(raw) if raw else {}
             except json.JSONDecodeError:
@@ -123,14 +123,14 @@ def llm_chat():
             bots[bot_name] = log_entry
             redis_client.set(redis_key, json.dumps(bots))
 
-        # Safety fallback if there is no prompt at all
+        # Last resort, if still nothing, give a safe generic prompt
         if system_prompt is None:
             system_prompt = (
                 "You are a friendly, helpful assistant. "
-                "Be polite, safe, and dominant."
+                "Be polite, safe, and constructive."
             )
 
-    # Calling the model
+    # Call the model
     completion = openai.chat.completions.create(
         model="gpt-4.1-mini",
         messages=[
@@ -141,6 +141,7 @@ def llm_chat():
 
     reply = completion.choices[0].message.content
 
+    # Log chat history
     log_entry = {
         "user_id": user_id,
         "bot_name": bot_name,
@@ -160,6 +161,7 @@ def llm_chat():
         "message": user_message,
         "reply": reply,
     })
+
 
 def get_system_prompt(bot_name: str, custom_system_prompt: str | None = None) -> str:
     if bot_name == "Bob":
@@ -257,6 +259,7 @@ def get_bot_from_cache(userid, bot_name):
         return None
 
     return bot.get("system_prompt")
+
 
 @app.get("/health")
 def health():

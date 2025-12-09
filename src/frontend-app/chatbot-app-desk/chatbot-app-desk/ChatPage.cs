@@ -21,7 +21,7 @@ namespace chatbot_app_desk
 
         private readonly int _currentUserId;
         private readonly string _username;
-        private readonly List<Conversation> _conversations = new List<Conversation>();
+        private readonly BindingList<Conversation> _conversations = new BindingList<Conversation>();
         public ChatPage(int currentUserId, string username)
         {
             InitializeComponent();
@@ -34,15 +34,10 @@ namespace chatbot_app_desk
             _username = username;
 
             // Preset LLM conversations
-            var personalisable = new Conversation { PersonName = "Personalisable" };
-            var bob = new Conversation { PersonName = "Bob" };
-            var alice = new Conversation { PersonName = "Alice" };
-            var mrsWong = new Conversation { PersonName = "Mrs Wong" };
-
-            _conversations.Add(personalisable);
-            _conversations.Add(bob);
-            _conversations.Add(alice);
-            _conversations.Add(mrsWong);
+            _conversations.Add(new Conversation { PersonName = "Personalisable" });
+            _conversations.Add(new Conversation { PersonName = "Bob" });
+            _conversations.Add(new Conversation { PersonName = "Alice" });
+            _conversations.Add(new Conversation { PersonName = "Mrs Wong" });
 
             lstbxChats.DataSource = _conversations;
         }
@@ -267,7 +262,7 @@ namespace chatbot_app_desk
         }
         private async void btnSend_Click_1(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtBoxPersonalise.Text))
+            if (txtBoxPersonalise.Visible == true && string.IsNullOrWhiteSpace(txtBoxPersonalise.Text))
             {
                 MessageBox.Show("Please enter a personalise prompt.");
                 return;

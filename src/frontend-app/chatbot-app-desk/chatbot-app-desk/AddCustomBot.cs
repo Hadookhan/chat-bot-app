@@ -16,11 +16,11 @@ namespace chatbot_app_desk
     public partial class AddCustomBot : Form
     {
 
-        List<Conversation> _convs;
+        BindingList<Conversation> _convs;
         int _userID;
         HttpClient _client;
 
-        public AddCustomBot(List<Conversation> convs, int userID, HttpClient client)
+        public AddCustomBot(BindingList<Conversation> convs, int userID, HttpClient client)
         {
             InitializeComponent();
 
@@ -55,7 +55,7 @@ namespace chatbot_app_desk
 
             string json = JsonSerializer.Serialize(reqBody);
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "/llm/chat");
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/llm/chat");
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
             request.Headers.Add("X-Bot-Name", botName);
 
@@ -68,83 +68,11 @@ namespace chatbot_app_desk
                     MessageBox.Show($"Error from server: {response.StatusCode}\n{error}");
                     return;
                 }
-
-                MessageBox.Show("Custom bot created (and first message sent)!");
-                this.Close();
+                _convs.Add(new Conversation { PersonName = botName });
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error creating custom bot: {ex.Message}");
-            }
-        }
-
-
-        private async Task GetCustomChatBot()
-        {
-            var url = $"/api/llm/users/bots/{_userID}";
-
-            HttpResponseMessage response;
-            try
-            {
-                response = await _client.GetAsync(url);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error calling bots API: {ex.Message}");
-                return;
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                Console.WriteLine($"Bot API returned {response.StatusCode}");
-                return;
-            }
-
-            var json = await response.Content.ReadAsStringAsync();
-            if (string.IsNullOrWhiteSpace(json) || json == "null")
-            {
-                return;
-            }
-
-            List<AddBotRequest> bots;
-            try
-            {
-                bots = JsonSerializer.Deserialize<List<AddBotRequest>>(
-                    json,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                );
-            }
-            catch (JsonException ex)
-            {
-                Console.WriteLine($"Error deserializing bots JSON: {ex.Message}");
-                return;
-            }
-
-            if (bots == null || bots.Count == 0)
-            {
-                return;
-            }
-
-            // Build a fast lookup of existing conversation names
-            var existingNames = new HashSet<string>(
-                _convs.Select(c => c.PersonName),
-                StringComparer.OrdinalIgnoreCase
-            );
-
-            foreach (var bot in bots)
-            {
-                if (string.IsNullOrWhiteSpace(bot.bot_name))
-                    continue;
-
-                if (!existingNames.Add(bot.bot_name))
-                    continue;
-
-                var conv = new Conversation
-                {
-                    PersonName = bot.bot_name
-                };
-
-                _convs.Add(conv);
             }
         }
 
@@ -182,8 +110,6 @@ namespace chatbot_app_desk
             }
 
             await CreateCustomBot();
-            
-            await GetCustomChatBot();
 
             MessageBox.Show($"{botName} added to your chat list!");
 
